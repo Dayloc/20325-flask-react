@@ -12,13 +12,6 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-alumnos = [{
-
-    "name": "Juan",
-    "lastname": "Perez",
-    "age": 25}]
-
-
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -30,15 +23,9 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
-@api.route('/alumnos', methods=['POST'])
-def add_alumnos():
-    request_body = request.get_json()
-    alumnos.append(request_body)
-    return jsonify(alumnos), 200
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    users = list(map(lambda x: x.serialize(), users))
+    return jsonify(users), 200
 
-@api.route('/alumnos', methods=['GET'])
-def get_alumnos():
-    response_body = {
-        "alumnos": alumnos
-    }
-    return jsonify(response_body), 200
